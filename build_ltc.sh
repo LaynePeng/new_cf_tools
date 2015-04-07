@@ -8,7 +8,7 @@ export DIEGO_RELEASE_PATH="/workspace/Diego/diego-release"
 export CF_RELEASE_PATH="/workspace/CF/cf-release"
 export DOCKER_IMAGE="cloudfoundry/lattice-pipeline"
 
-CMD="echo Start to compile. && $DIEGO_RELEASE_PATH/scripts/update && $LATTICE_SRC_PATH/compile $LATTICE_SRC_PATH/lattice-build $DIEGO_RELEASE_PATH $CF_RELEASE_PATH $LATTICE_SRC_PATH && echo Creating lattice.tgz && cd $LATTICE_SRC_PATH && tar cvzf lattice.tgz lattice-build  && rm -rf $LATTICE_SRC_PATH/lattice-build"
+CMD="echo Start to compile. && $DIEGO_RELEASE_PATH/scripts/update && source $LATTICE_SRC_PATH/lattice-pipeline/helpers/build_ltc_helpers && setup_go_env && construct_ltc_gopath && run_unit_tests && git_describe_lattice && go_build_ltc && generate_ltc_tarball $LATTICE_SRC_PATH"
 
 docker run --rm -a stdout -a stderr -w /workspace \
   -v ${DOCKER_WORKSPACE_MOUNT_DIR:-~/workspace/}:/workspace \
