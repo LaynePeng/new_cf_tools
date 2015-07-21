@@ -9,7 +9,7 @@ export DIEGO_LATTICE_LIB=$DIEGO_RELEASE_PATH"/src/github.com/cloudfoundry-incuba
 export CF_RELEASE_PATH="/workspace/CF/cf-release"
 export DOCKER_IMAGE="cloudfoundry/lattice-pipeline"
 
-CMD="echo Start to compile. && pushd $DIEGO_RELEASE_PATH && ./scripts/update && popd && mkdir $DIEGO_LATTICE_LIB && pushd $LATTICE_SRC_PATH && tar -c --exclude .git . | tar -x -C $DIEGO_LATTICE_LIB && popd && $LATTICE_SRC_PATH/cluster/scripts/compile $LATTICE_SRC_PATH/lattice-build $DIEGO_RELEASE_PATH $CF_RELEASE_PATH $LATTICE_SRC_PATH && echo Creating lattice.tgz && cd $LATTICE_SRC_PATH && tar cvzf lattice.tgz lattice-build && echo Start to cleaning. && rm -rf $LATTICE_SRC_PATH/lattice-build && rm -rf $DIEGO_LATTICE_LIB"
+CMD="echo Install dependency &&  apt-get update && apt-get install -y btrfs-tools && echo Start to compile. && pushd $DIEGO_RELEASE_PATH && ./scripts/update && popd && mkdir $DIEGO_LATTICE_LIB && pushd $LATTICE_SRC_PATH && tar -c --exclude .git . | tar -x -C $DIEGO_LATTICE_LIB && popd && $LATTICE_SRC_PATH/cluster/scripts/compile $LATTICE_SRC_PATH/lattice-build $DIEGO_RELEASE_PATH $CF_RELEASE_PATH $LATTICE_SRC_PATH && echo Creating lattice.tgz && cd $LATTICE_SRC_PATH && tar cvzf lattice.tgz lattice-build && echo Start to cleaning. && rm -rf $LATTICE_SRC_PATH/lattice-build && rm -rf $DIEGO_LATTICE_LIB"
 
 docker run --rm -a stdout -a stderr -w /workspace \
   -v ${DOCKER_WORKSPACE_MOUNT_DIR:-~/workspace/}:/workspace \
